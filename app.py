@@ -4,6 +4,12 @@ from flask import Flask, jsonify
 manager = GameManager()
 app = Flask(__name__)
 
+@app.errorhandler(GameException)
+def handle_game_exception(error: GameException):
+    response = jsonify(error.args[0])
+    response.status_code = 400
+    return response
+
 # Ваша задача реализовать API которое позволит игрокам играть в крестики-нолики.
 
 # Класс Game имеет метод to_dict который возвращает словарь с информацией о текущем состоянии игры.
@@ -95,6 +101,7 @@ def get_games():
 #     ]
 # }
 # PUT /game/<id>/start - начинает игру
+# POST /game/<id>/start - начинает игру
 # В теле запроса необходимо передать имя и пароль игрока. 
 # Начать игру может только игрок X
 # Пример запроса:

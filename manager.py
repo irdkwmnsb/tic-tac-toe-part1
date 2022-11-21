@@ -57,6 +57,8 @@ class Game():
     def start(self):
         self.current_player = self.player_x
         self.started = True
+        if self.player_x is None or self.player_o is None:
+            raise GameException("Not enough players")
 
     def __repr__(self):
         return f"Game({self.id} - {self.player_x} vs {self.player_o})"
@@ -128,4 +130,12 @@ class GameManager():
             raise GameException("Player already exists")
         player = Player(name, password)
         self.players[name] = player
+        return player
+    
+    def get_player(self, name, password) -> Player:
+        if name not in self.players:
+            raise GameException("Player not found")
+        player = self.players[name]
+        if not player.check_password(password):
+            raise GameException("Player not found")
         return player
